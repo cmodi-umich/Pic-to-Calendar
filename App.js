@@ -3,9 +3,9 @@ import { createStackNavigator } from "@react-navigation/stack";
 import * as React from "react";
 import { StyleSheet, View } from "react-native";
 
-import BottomTabNavigator from "./navigation/BottomTabNavigator";
-import LinkingConfiguration from "./navigation/LinkingConfiguration";
-import CameraScreen from "./screens/CameraScreen";
+import BottomTabNavigator from "./src/navigation/BottomTabNavigator";
+import LinkingConfiguration from "./src/navigation/LinkingConfiguration";
+import CameraScreen from "./src/screens/CameraScreen";
 
 const Stack = createStackNavigator();
 

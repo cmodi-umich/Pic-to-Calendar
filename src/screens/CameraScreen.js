@@ -107,7 +107,7 @@ export default function CameraScreen() {
                 }}
               >
                 <Image
-                  source={require("../assets/images/flip-camera.png")}
+                  source={require("../../assets/images/flip-camera.png")}
                   resizeMode='contain'
                   style={styles.Image}
                 />
