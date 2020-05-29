@@ -18,11 +18,11 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.cmodi.gcal_app",
+      "bundleIdentifier": "com.gcalapp",
       "buildNumber": "1.0.0"
     },
     "android": {
-      "package": "com.cmodi.gcal_app",
+      "package": "com.cmodi.gcalapp",
       "versionCode": 1
     },
     "web": {
