@@ -10,10 +10,6 @@ export default function HomeScreen({ navigation }) {
     <View style={styles.container}>
       <Text>Welcome to the GCAL App!</Text>
       <Button title='Sign In' onPress={handleSignIn} />
-      <Button
-        onPress={() => navigation.navigate("Camera")}
-        title='Go to Camera'
-      />
     </View>
   );
 }

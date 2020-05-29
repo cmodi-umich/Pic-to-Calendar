@@ -22,6 +22,10 @@ export default function CameraScreen() {
   const [photo, setPhoto] = useState(null);
   const [liked, setLiked] = useState(false);
 
+  React.useEffect(() => {
+    console.log("loaded");
+  });
+
   var lastTap = null;
   const handleDoubleTap = () => {
     const now = Date.now();
@@ -127,7 +131,7 @@ export default function CameraScreen() {
 }
 
 const styles = StyleSheet.create({
-  ImageBackground: { height: screenHeight - 80, width: screenWidth },
+  ImageBackground: { height: screenHeight, width: screenWidth },
   BigView: {
     flex: 1,
     backgroundColor: "transparent",
@@ -136,7 +140,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#F9F9F9",
     height: 35,
     width: screenWidth - 30,
-    marginTop: 30,
+    marginTop: 50,
     alignSelf: "center",
     borderRadius: 15,
     flexDirection: "row",
@@ -155,7 +159,7 @@ const styles = StyleSheet.create({
     marginRight: 5,
   },
   FlipImage: {
-    marginTop: 7,
+    marginTop: 40,
     marginRight: 7,
     height: 30,
     width: 60,
