@@ -42,7 +42,6 @@ export default function HomeScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <Text>Welcome to the GCAL App!</Text>
       <Button title='Sign In' onPress={handleSignIn} />
       <Button title='print' onPress={() => console.log(accessToken)} />
       <Button
