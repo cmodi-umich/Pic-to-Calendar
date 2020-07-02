@@ -10,6 +10,7 @@ npm-debug.*
 web-build/
 
 src/constants/Firebase.js
+config.js
 
 # macOS
 .DS_Store

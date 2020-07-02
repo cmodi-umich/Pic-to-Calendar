@@ -1,55 +1,86 @@
-import React, { useState } from "react";
-import { StyleSheet, Text, Button, View } from "react-native";
-import * as Google from "expo-google-app-auth";
-
-async function signInWithGoogleAsync() {
-  try {
-    const result = await Google.logInAsync({
-      androidClientId:
-        "469044449243-99o0ititqfn517eh4glvrqkp37jiq5au.apps.googleusercontent.com",
-      iosClientId:
-        "469044449243-fdhtjgejhjrsfhcu80gfhiacod2ecmt9.apps.googleusercontent.com",
-      scopes: ["profile", "email"],
-    });
-
-    if (result.type === "success") {
-      return result;
-    } else {
-      return { cancelled: true };
-    }
-  } catch (e) {
-    return { error: true };
-  }
-}
+import React, { useState } from 'react';
+import { StyleSheet, Text, Button, View, FlatList } from 'react-native';
+import { getEvents } from '../backend_calls/events';
+import { signInWithGoogleAsync } from '../backend_calls/user';
 
 export default function HomeScreen({ navigation }) {
-  [accessToken, setAccessToken] = useState();
-
-  async function getSomething() {
-    return await fetch(
-      "https://www.googleapis.com/calendar/v3/users/me/calendarList",
-      {
-        headers: { Authorization: `Bearer ${accessToken.accessToken}` },
-      }
-    );
-  }
+  const [user, setUser] = useState();
+  const [accessToken, setAccessToken] = useState({});
+  const [events, setEvents] = useState([]);
 
   const handleSignIn = () => {
-    signInWithGoogleAsync().then((token) => {
-      setAccessToken(token);
+    signInWithGoogleAsync().then(({ user, accessToken }) => {
+      setUser(user);
+      setAccessToken(accessToken);
+      getEvents(accessToken, user.email).then((eventsRes) => {
+        const events = eventsRes.map((event) => {
+          const { id, status, summary, colorId, start, end } = event;
+          return { id, status, summary, colorId, start, end };
+        });
+        setEvents(events);
+      });
     });
   };
 
   return (
     <View style={styles.container}>
-      <Button title='Sign In' onPress={handleSignIn} />
-      <Button title='print' onPress={() => console.log(accessToken)} />
-      <Button
-        title='get list'
-        onPress={async () => {
-          getSomething().then((res) => console.log(res.json()));
+      {user ? (
+        <>
+          <Text style={{ alignSelf: 'center' }}>Welcome, {user.name}</Text>
+          <Button
+            title='Print User Info'
+            onPress={() => {
+              console.log(user);
+            }}
+          />
+        </>
+      ) : (
+        <Button title='Sign In' onPress={handleSignIn} />
+      )}
+      <View
+        style={{
+          flex: 1,
+          flexDirection: 'column',
         }}
-      />
+      >
+        {events.length > 0 ? (
+          <>
+            <Text
+              style={{
+                alignSelf: 'center',
+              }}
+            >
+              Upcoming Events:
+            </Text>
+            <FlatList
+              data={events}
+              renderItem={({ item }) => {
+                return (
+                  <View
+                    style={{
+                      alignSelf: 'center',
+                      padding: 5,
+                      margin: 5,
+                      border: 'solid',
+                      borderWidth: 2,
+                      width: '90%',
+                      borderRadius: 15,
+                    }}
+                    key={item.id}
+                  >
+                    <Text style={{ alignSelf: 'center' }}>{item.summary}</Text>
+                    <Text style={{ alignSelf: 'center' }}>{item.colorId}</Text>
+                    <Text style={{ alignSelf: 'center' }}>{item.status}</Text>
+                  </View>
+                );
+              }}
+              keyExtractor={(item) => item.id}
+            />
+          </>
+        ) : (
+          <Text>No Events!</Text>
+        )}
+      </View>
     </View>
   );
 }
@@ -57,6 +88,7 @@ export default function HomeScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    flexDirection: 'column',
+    backgroundColor: '#fff',
   },
 });
