@@ -1,22 +1,13 @@
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import * as React from "react";
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import * as React from 'react';
 
-import TabBarIcon from "../components/TabBarIcon";
-import HomeScreen from "../screens/HomeScreen";
-import LinksScreen from "../screens/LinksScreen";
+import TabBarIcon from '../components/TabBarIcon';
+import HomeScreen from '../screens/HomeScreen';
+import LinksScreen from '../screens/LinksScreen';
 
 const BottomTab = createBottomTabNavigator();
 
-const INITIAL_ROUTE_NAME = "Home";
-
-const tabBarOptions = {
-  style: {
-    height: 65,
-  },
-  labelStyle: {
-    marginBottom: 15,
-  },
-};
+const INITIAL_ROUTE_NAME = 'Home';
 
 export default function BottomTabNavigator({ navigation, route }) {
   // Set the header title on the parent stack navigator depending on the
@@ -27,7 +18,7 @@ export default function BottomTabNavigator({ navigation, route }) {
   }, [navigation, route]);
 
   return (
-    <BottomTab.Navigator tabBarOptions={tabBarOptions}>
+    <BottomTab.Navigator>
       <BottomTab.Screen
         name='Home'
         component={HomeScreen}
@@ -55,9 +46,9 @@ function getHeaderTitle(route) {
     route.state?.routes[route.state.index]?.name ?? INITIAL_ROUTE_NAME;
 
   switch (routeName) {
-    case "Home":
-      return "Home";
-    case "About":
-      return "Links to learn more";
+    case 'Home':
+      return 'Home';
+    case 'About':
+      return 'Links to learn more';
   }
 }

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, Button, View, FlatList } from 'react-native';
 import { getEvents } from '../backend_calls/events';
 import { signInWithGoogleAsync } from '../backend_calls/user';
+import EventItem from '../components/EventItem';
 
 export default function HomeScreen({ navigation }) {
   const [user, setUser] = useState();
@@ -24,6 +25,7 @@ export default function HomeScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
+      <View style={{ marginTop: 40 } /*SPACER FOR NOW*/} />
       {user ? (
         <>
           <Text style={{ alignSelf: 'center' }}>Welcome, {user.name}</Text>
@@ -55,24 +57,7 @@ export default function HomeScreen({ navigation }) {
             <FlatList
               data={events}
               renderItem={({ item }) => {
-                return (
-                  <View
-                    style={{
-                      alignSelf: 'center',
-                      padding: 5,
-                      margin: 5,
-                      border: 'solid',
-                      borderWidth: 2,
-                      width: '90%',
-                      borderRadius: 15,
-                    }}
-                    key={item.id}
-                  >
-                    <Text style={{ alignSelf: 'center' }}>{item.summary}</Text>
-                    <Text style={{ alignSelf: 'center' }}>{item.colorId}</Text>
-                    <Text style={{ alignSelf: 'center' }}>{item.status}</Text>
-                  </View>
-                );
+                return <EventItem item={item} />;
               }}
               keyExtractor={(item) => item.id}
             />

@@ -1,10 +1,11 @@
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
-import * as React from "react";
-import { StyleSheet, View } from "react-native";
-import Swiper from "react-native-swiper";
-import BottomTabNavigator from "./src/navigation/BottomTabNavigator";
-import CameraScreen from "./src/screens/CameraScreen";
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import * as React from 'react';
+import { StyleSheet, View } from 'react-native';
+import Swiper from 'react-native-swiper';
+import BottomTabNavigator from './src/navigation/BottomTabNavigator';
+import CameraScreen from './src/screens/CameraScreen';
+import HomeScreen from './src/screens/HomeScreen';
 
 const Stack = createStackNavigator();
 
@@ -23,13 +24,13 @@ function Navigator(props) {
 export default function App(props) {
   return (
     <Swiper
-      horizontal={false}
+      horizontal={true}
       style={{}}
       showsButtons={false}
       loop={false}
       showsPagination={false}
     >
-      <Navigator />
+      <HomeScreen />
       <CameraScreen />
     </Swiper>
   );
@@ -38,6 +39,6 @@ export default function App(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
   },
 });

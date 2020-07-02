@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
   Text,
   View,
@@ -8,12 +8,12 @@ import {
   Dimensions,
   ImageBackground,
   StyleSheet,
-} from "react-native";
-import { Camera } from "expo-camera";
-import { Entypo, Feather } from "@expo/vector-icons";
+} from 'react-native';
+import { Camera } from 'expo-camera';
+import { Entypo, Feather } from '@expo/vector-icons';
 
-const screenWidth = Math.round(Dimensions.get("window").width);
-const screenHeight = Math.round(Dimensions.get("window").height);
+const screenWidth = Math.round(Dimensions.get('window').width);
+const screenHeight = Math.round(Dimensions.get('window').height);
 
 export default function CameraScreen() {
   const [hasPermission, setHasPermission] = useState(null);
@@ -23,7 +23,7 @@ export default function CameraScreen() {
   const [liked, setLiked] = useState(false);
 
   React.useEffect(() => {
-    console.log("loaded");
+    console.log('loaded');
   });
 
   var lastTap = null;
@@ -49,7 +49,7 @@ export default function CameraScreen() {
   useEffect(() => {
     (async () => {
       const { status } = await Camera.requestPermissionsAsync();
-      setHasPermission(status === "granted");
+      setHasPermission(status === 'granted');
     })();
   }, []);
 
@@ -72,7 +72,8 @@ export default function CameraScreen() {
               <View style={styles.icons}>
                 <TouchableOpacity
                   onPress={() => {
-                    console.log("Processing");
+                    console.log('Processing');
+                    console.log(photo);
                   }}
                 >
                   <Entypo name='check' size={30} color='green' />
@@ -111,7 +112,7 @@ export default function CameraScreen() {
                 }}
               >
                 <Image
-                  source={require("../../assets/images/flip-camera.png")}
+                  source={require('../../assets/images/flip-camera.png')}
                   resizeMode='contain'
                   style={styles.Image}
                 />
@@ -134,28 +135,35 @@ const styles = StyleSheet.create({
   ImageBackground: { height: screenHeight, width: screenWidth },
   BigView: {
     flex: 1,
-    backgroundColor: "transparent",
+    backgroundColor: 'transparent',
   },
   LikeImage: {
-    backgroundColor: "#F9F9F9",
+    backgroundColor: '#F9F9F9',
     height: 35,
     width: screenWidth - 30,
     marginTop: 50,
-    alignSelf: "center",
+    alignSelf: 'center',
     borderRadius: 15,
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.34,
+    shadowRadius: 6.27,
   },
   insideText: {
     fontSize: 22,
-    alignSelf: "flex-start",
+    alignSelf: 'flex-start',
     marginLeft: 7,
     marginTop: 2,
   },
   icons: {
-    flexDirection: "row",
+    flexDirection: 'row',
     marginRight: 3,
-    alignItems: "center",
+    alignItems: 'center',
     marginRight: 5,
   },
   FlipImage: {
@@ -163,9 +171,9 @@ const styles = StyleSheet.create({
     marginRight: 7,
     height: 30,
     width: 60,
-    alignSelf: "flex-end",
-    alignItems: "center",
-    backgroundColor: "#F7F7F7",
+    alignSelf: 'flex-end',
+    alignItems: 'center',
+    backgroundColor: '#F7F7F7',
     borderRadius: 20,
   },
   Image: {
@@ -175,7 +183,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   snapper: {
-    position: "absolute",
+    position: 'absolute',
     bottom: 20,
     left: screenWidth / 2 - 40,
   },
