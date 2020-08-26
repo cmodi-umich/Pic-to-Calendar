@@ -4,15 +4,15 @@ import { getEvents } from '../backend_calls/events';
 import { signInWithGoogleAsync } from '../backend_calls/user';
 import EventItem from '../components/EventItem';
 
-export default function HomeScreen({ navigation }) {
+export default function HomeScreen({ accessToken, setAccessToken, setEmail }) {
   const [user, setUser] = useState();
-  const [accessToken, setAccessToken] = useState({});
   const [events, setEvents] = useState([]);
 
   const handleSignIn = () => {
     signInWithGoogleAsync().then(({ user, accessToken }) => {
       setUser(user);
       setAccessToken(accessToken);
+      setEmail(user.email);
       getEvents(accessToken, user.email).then((eventsRes) => {
         const events = eventsRes.map((event) => {
           const { id, status, summary, colorId, start, end } = event;

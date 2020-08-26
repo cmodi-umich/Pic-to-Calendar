@@ -21,7 +21,10 @@ function Navigator(props) {
   );
 }
 
-export default function App(props) {
+export default function App() {
+  const [accessToken, setAccessToken] = React.useState(null);
+  const [email, setEmail] = React.useState(null);
+
   return (
     <Swiper
       horizontal={true}
@@ -30,8 +33,12 @@ export default function App(props) {
       loop={false}
       showsPagination={false}
     >
-      <HomeScreen />
-      <CameraScreen />
+      <HomeScreen
+        accessToken={accessToken}
+        setAccessToken={setAccessToken}
+        setEmail={setEmail}
+      />
+      <CameraScreen accessToken={accessToken} email={email} />
     </Swiper>
   );
 }

@@ -7,20 +7,27 @@ import {
   TouchableWithoutFeedback,
   Dimensions,
   ImageBackground,
+  Modal,
+  TextInput,
   StyleSheet,
 } from 'react-native';
 import { Camera } from 'expo-camera';
 import { Entypo, Feather } from '@expo/vector-icons';
+import { scrapeImageOCR, addNewEvent } from '../backend_calls/events';
 
 const screenWidth = Math.round(Dimensions.get('window').width);
 const screenHeight = Math.round(Dimensions.get('window').height);
 
-export default function CameraScreen() {
+export default function CameraScreen({ email, accessToken }) {
   const [hasPermission, setHasPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [ready, setReady] = useState(false);
   const [photo, setPhoto] = useState(null);
   const [liked, setLiked] = useState(false);
+  const [photoAnalyzed, setPhotoAnalyzed] = useState(false);
+  const [jsonInformation, setJSONInformation] = useState({});
+  const [error, setError] = useState(null);
+  const [date, setDate] = useState('');
 
   React.useEffect(() => {
     console.log('loaded');
@@ -42,7 +49,7 @@ export default function CameraScreen() {
   };
 
   const handlePictureTaken = async () => {
-    setPhoto(await this.camera.takePictureAsync());
+    setPhoto(await this.camera.takePictureAsync({ base64: true }));
     setLiked(true);
   };
 
@@ -72,8 +79,11 @@ export default function CameraScreen() {
               <View style={styles.icons}>
                 <TouchableOpacity
                   onPress={() => {
-                    console.log('Processing');
-                    console.log(photo);
+                    scrapeImageOCR(
+                      setJSONInformation,
+                      setPhotoAnalyzed,
+                      setError
+                    );
                   }}
                 >
                   <Entypo name='check' size={30} color='green' />
@@ -88,6 +98,122 @@ export default function CameraScreen() {
                 </TouchableOpacity>
               </View>
             </View>
+            <Modal
+              animationType='slide'
+              visible={photoAnalyzed}
+              onRequestClose={() => {
+                setPhotoAnalyzed(false);
+              }}
+            >
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginTop: 22,
+                }}
+              >
+                <View
+                  style={{
+                    margin: 20,
+                    backgroundColor: 'white',
+                    borderRadius: 20,
+                    padding: 35,
+                    alignItems: 'center',
+                    shadowColor: '#000',
+                    shadowOffset: {
+                      width: 0,
+                      height: 2,
+                    },
+                    shadowOpacity: 0.25,
+                    shadowRadius: 3.84,
+                    elevation: 5,
+                  }}
+                >
+                  <TextInput
+                    style={{
+                      height: 40,
+                      paddingHorizontal: 5,
+                      borderColor: 'gray',
+                      borderWidth: 1,
+                      borderRadius: 3,
+                    }}
+                    value={jsonInformation.title}
+                    onChangeText={(text) =>
+                      setJSONInformation({ ...jsonInformation, title: text })
+                    }
+                  />
+                  <TextInput
+                    style={{
+                      height: 40,
+                      paddingHorizontal: 5,
+                      borderColor: 'gray',
+                      borderWidth: 1,
+                      borderRadius: 3,
+                    }}
+                    value={jsonInformation.start_time}
+                    onChangeText={(text) =>
+                      setJSONInformation({
+                        ...jsonInformation,
+                        start_time: text,
+                      })
+                    }
+                  />
+                  <TextInput
+                    style={{
+                      height: 40,
+                      paddingHorizontal: 5,
+                      borderColor: 'gray',
+                      borderWidth: 1,
+                      borderRadius: 3,
+                    }}
+                    value={jsonInformation.end_time}
+                    onChangeText={(text) =>
+                      setJSONInformation({ ...jsonInformation, end_time: text })
+                    }
+                  />
+                  <TextInput
+                    style={{
+                      height: 40,
+                      paddingHorizontal: 5,
+                      borderColor: 'gray',
+                      borderWidth: 1,
+                      borderRadius: 3,
+                    }}
+                    value={jsonInformation.location}
+                    onChangeText={(text) =>
+                      setJSONInformation({ ...jsonInformation, location: text })
+                    }
+                  />
+                  <TextInput
+                    style={{
+                      height: 40,
+                      paddingHorizontal: 5,
+                      borderColor: 'gray',
+                      borderWidth: 1,
+                      borderRadius: 3,
+                    }}
+                    value={jsonInformation.location}
+                    onChangeText={(text) => setDate(text)}
+                  />
+                  <TouchableHighlight
+                    style={{
+                      backgroundColor: '#F194FF',
+                      borderRadius: 20,
+                      padding: 10,
+                      elevation: 2,
+                      backgroundColor: '#2196F3',
+                    }}
+                    onPress={() => {
+                      setPhotoAnalyzed(false);
+                      addNewEvent(accessToken, email, jsonInformation, date);
+                    }}
+                  >
+                    <Text style={styles.textStyle}>Add Event!</Text>
+                  </TouchableHighlight>
+                </View>
+              </View>
+            </Modal>
           </View>
         </ImageBackground>
       ) : (

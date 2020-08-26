@@ -1,4 +1,5 @@
 import { ISODateString, makeURLParams } from './eventUtils';
+import { scrapeImageOCR } from './imageScraping';
 
 async function getEvents(accessToken, email) {
   const now = new Date();
@@ -19,7 +20,6 @@ async function getEvents(accessToken, email) {
   }).then((res) => {
     if (res.status === 200) {
       return res.json().then((jsonRes) => {
-        //console.log(jsonRes['items']);
         return jsonRes['items'];
       });
     } else {
@@ -28,4 +28,41 @@ async function getEvents(accessToken, email) {
   });
 }
 
-export { getEvents };
+function addNewEvent(accessToken, email, jsonObject, date) {
+  const dateOptions = date.split('/');
+  const dateOfEventStart = new Date(
+    dateOptions[2],
+    dateOptions[0],
+    dateOptions[1],
+    jsonObject.start_time.slice(0, 1),
+    jsonObject.start_time.slice(2, 4)
+  );
+  const dateOfEventEnd = new Date(
+    dateOptions[2],
+    dateOptions[0],
+    dateOptions[1],
+    jsonObject.start_time.slice(0, 1),
+    jsonObject.start_time.slice(2, 4)
+  );
+  const googleDateStart = ISODateString(dateOfEventStart);
+  const googleDateEnd = ISODateString(dateOfEventEnd);
+  const url = `https://www.googleapis.com/calendar/v3/calendars/${email}/events`;
+  return fetch(url, {
+    method: 'GET',
+    headers: { Authorization: `Bearer ${accessToken}` },
+    body: {
+      start: {
+        dateTime: googleDateStart,
+      },
+      end: {
+        dateTime: googleDateEnd,
+      },
+      summary: jsonObject.title,
+      location: jsonObject.location,
+    },
+  }).then((res) => {
+    console.log(res);
+  });
+}
+
+export { getEvents, scrapeImageOCR, addNewEvent };
