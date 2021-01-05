@@ -1,4 +1,4 @@
-node_modules/**/*
+node_modules
 .expo/*
 npm-debug.*
 *.jks
@@ -9,8 +9,9 @@ npm-debug.*
 *.orig.*
 web-build/
 
-src/constants/Firebase.js
 config.js
+env/
+.vscode
 
 # macOS
 .DS_Store
